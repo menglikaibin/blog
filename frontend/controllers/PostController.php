@@ -12,6 +12,8 @@ use common\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use frontend\models\UploadForm;
+use yii\web\UploadedFile;
 
 /**
  * PostController implements the CRUD actions for Post model.
@@ -54,6 +56,21 @@ class PostController extends Controller
             'tags' => $tags,
             'recentComments' => $recentComments,
         ]);
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost)
+        {
+            $model->imageFile = UploadedFile::getInstance($model,'imageFile');
+            if ($model->upload()) {
+                return true;
+            }
+
+        }
+        return $this->render('upload',['model'=>$model]);
     }
 
     /**

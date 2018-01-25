@@ -4,6 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use frontend\components\RctReplyWidget;
 use common\models\Post;
+use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\PostSearch */
@@ -18,7 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
 
         <div class="col-md-9">
-
             <?= \yii\widgets\ListView::widget
             ([
                 'id' => 'postList',
@@ -27,15 +28,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'layout' => '{items} {pager}',
                 'pager' =>
                     [
-                        'maxButtonCount' => 10,
-                        'nextPageLabel' => Yii::t('app', '下一页'),
-                        'prevPageLabel' => Yii::t('app', '下一页')
+                    'maxButtonCount' => 10,
+                    'nextPageLabel' => Yii::t('app', '下一页'),
+                    'prevPageLabel' => Yii::t('app', '下一页')
                     ]
             ]) ?>
 
         </div>
 
         <div class="col-md-3">
+
             <div class="searchbox">
 
                 <ul class="list-group">
