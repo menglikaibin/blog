@@ -7,29 +7,46 @@
  */
 namespace frontend\models;
 
-use yii\base\Model;
+use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
 
-class UploadForm extends Model
+class UploadForm extends ActiveRecord
 {
-    public $imageFile;
+    /**
+     * @var UploadedFile
+     */
+    public static function tableName()
+    {
+        return 'upload';
+    }
+
+
+    public $image;
 
     public function rules()
     {
         return
             [
-                ['imageFile','file','skipOnEmpty'=>false,'extensions'=>'png,jpg'],
+                [['image'],'file','skipOnEmpty'=>false,'extensions'=>'jpg,png']
             ];
     }
 
-    public function upload()
-    {
-        if ($this->validate())
-        {
-            $this->imageFile->saveAs('/uploads'.$this->imageFile->baseName.'.'.
-                $this->imageFile->extension);
-            return true;
-        }
-        return false;
-    }
+//    public function addImage()
+//    {
+//
+//    }
+
+//    public function upload()
+//    {
+//        if ($this->validate())
+//        {
+//            $this->imageFile->saveAs('uploads/'.$this->imageFile->baseName.'.'.$this->imageFile->extension);
+//
+//            return true;
+//        }
+//        else
+//        {
+//            return false;
+//        }
+//    }
 }

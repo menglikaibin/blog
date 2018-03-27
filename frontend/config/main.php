@@ -1,4 +1,5 @@
 <?php
+use dektrium\user\Mailer;
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
     require __DIR__ . '/../../common/config/params-local.php',
@@ -13,29 +14,44 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'defaultRoute' => 'post/index',
     'language' => 'zh-CN',
-    'components' => [
-        'request' => [
+    'modules' =>
+    [
+//        'user' =>
+//        [
+//            'as frontend' => 'dektrium\user\filters\FrontendFilter'
+//        ]
+    ],
+
+    'components' =>
+    [
+        'request' =>
+        [
             'csrfParam' => '_csrf-frontend',
         ],
-        'user' => [
+        'user' =>
+        [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
         ],
-        'session' => [
+        'session' =>
+        [
             // this is the name of the session cookie used for login on the frontend
             'name' => 'advanced-frontend',
         ],
-        'log' => [
+        'log' =>
+        [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets' => [
+            'targets' =>
+            [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'errorHandler' => [
+        'errorHandler' =>
+        [
             'errorAction' => 'site/error',
         ],
 
@@ -49,6 +65,27 @@ return [
 //                'posts'=>'post/index',
 //            ],
 //        ],
+        'mailer' =>
+        [
+            'class' => 'yii\swiftmailer\Mailer',
+//            'viewPath' => '@frontend/mail',
+            'useFileTransport' => false,
+            'Transport' =>
+                [
+                    'class' => 'Swift_SmtpTransport',
+                    'host' => 'smtp.163.com',
+                    'username' => 'menglikaibin@163.com',
+                    'password' => 'wukaibin15',
+                    'port' => 25,
+                    'encryption' => 'tls'
+                ],
+            'messageConfig' =>
+                [
+                    'charset' => 'UTF-8',
+                    'from' => ['menglikaibin@163.com']
+                ]
+
+        ],
 
     ],
     'params' => $params,

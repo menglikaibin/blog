@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\widgets\Menu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\AdminuserSearch */
@@ -9,6 +10,17 @@ use yii\grid\GridView;
 
 $this->title = '管理员管理';
 $this->params['breadcrumbs'][] = $this->title;
+
+echo Menu::widget
+    ([
+        'activateItems' => false,
+        'items' =>
+            [
+                ['label' => 'Home', 'url' => ['site/index']],
+                ['label' => 'Productes', 'url' => ['site/index']],
+                ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest]
+            ]
+    ])
 ?>
 <div class="adminuser-index">
 
@@ -22,10 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::a('新增管理员', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
-    <?= GridView::widget([
+    <?= GridView::widget
+    ([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
-        'columns' => [
+        'columns' =>
+        [
 //            ['class' => 'yii\grid\SerialColumn'],
 
             'id',
@@ -38,13 +52,16 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'password_hash',
             // 'password_reset_token',
 
-            ['class' => 'yii\grid\ActionColumn',
+            [
+                'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}{update}{resetpwd}{privilege}',
 
-
-                'buttons' => [
-                    'resetpwd' => function ($url, $model, $key) {
-                        $options = [
+                'buttons' =>
+                [
+                    'resetpwd' => function ($url, $model, $key)
+                    {
+                        $options =
+                        [
                             'title' => Yii::t('yii', '重置密码'),
                             'aria-label' => Yii::t('yii', '重置密码'),
                             'data-pjax' => '0'
@@ -53,8 +70,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
 
 
-                    'privilege' => function ($url, $model, $key) {
-                        $options = [
+                    'privilege' => function ($url, $model, $key)
+                    {
+                        $options =
+                        [
                             'title' => Yii::t('yii', '权限'),
                             'aria-label' => Yii::t('yii', '权限'),
                             'data-pjax' => '0',

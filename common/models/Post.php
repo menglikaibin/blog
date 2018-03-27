@@ -103,7 +103,8 @@ class Post extends ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        if (parent::beforeSave($insert))
+        {
             if ($insert)
             {
                 $this->create_time = time();

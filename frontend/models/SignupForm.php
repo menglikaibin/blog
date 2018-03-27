@@ -3,6 +3,7 @@ namespace frontend\models;
 
 use yii\base\Model;
 use common\models\User;
+use Yii;
 
 /**
  * Signup form
@@ -36,6 +37,16 @@ class SignupForm extends Model
         ];
     }
 
+    public function attributeLabels()
+    {
+        return
+        [
+            'username' => '用户名',
+            'password' => '密码',
+            'email' => '邮箱'
+        ];
+    }
+
     /**
      * Signs user up.
      *
@@ -46,13 +57,23 @@ class SignupForm extends Model
         if (!$this->validate()) {
             return null;
         }
+
+        $mail = Yii::$app->mailer->compose();
+        $mail->setTo($this->email);
+        $mail->setSubject('测试');
+        $mail->setTextBody('测试');
+        $mail->setHtmlBody('测试');
+
+        if ($mail->send()) {
+            $user = new User();
+            $user->username = $this->username;
+            $user->email = $this->email;
+            $user->setPassword($this->password);
+            $user->generateAuthKey();
+
+            return $user->save() ? $user : null;
+        }
         
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
+
     }
 }

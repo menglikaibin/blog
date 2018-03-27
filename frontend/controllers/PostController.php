@@ -45,7 +45,6 @@ class PostController extends Controller
         $tags = Tag::findTagWeights();
         $recentComments = Comment::findRecentComments();
 
-
         $searchModel = new PostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -62,14 +61,26 @@ class PostController extends Controller
     {
         $model = new UploadForm();
 
-        if (Yii::$app->request->isPost)
-        {
-            $model->imageFile = UploadedFile::getInstance($model,'imageFile');
-            if ($model->upload()) {
-                return true;
-            }
 
+
+        if ($model->load(Yii::$app->request->post())) {
+            $image = UploadedFile::getInstance($model, 'image');
+            $ext = $image->getExtension();
+            $imageName = time() . rand(100, 999) . '.' . $ext;
+            $image->saveAs('uploads/' . $imageName);//设置图片的存储位置
+            $model->image = 'http://www.xxx.cn/uploads/' . $imageName;//设置图片的url，可以用_SERVER["HTTP_HOST"]+图片名代替
+
+            $command = Yii::$app->db
+                ->createCommand()
+                ->insert('upload',['image'=>$imageName]);
+
+            $command->execute();
+            {
+                return $this->redirect(['index']);
+            }
+            echo 'failed';
         }
+
         return $this->render('upload',['model'=>$model]);
     }
 
@@ -95,10 +106,14 @@ class PostController extends Controller
     {
         $model = new Post();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->save())
+        {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
+        }
+        else
+        {
+            return $this->render('create',
+            [
                 'model' => $model,
             ]);
         }
@@ -117,7 +132,8 @@ class PostController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save())
         {
             return $this->redirect(['view', 'id' => $model->id]);
-        } else
+        }
+        else
         {
             return $this->render('update',
             [

@@ -12,6 +12,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\AuthAssignment;
+use backend\models\SignupForm;
 
 /**
  * AdminuserController implements the CRUD actions for Adminuser model.
@@ -69,12 +70,15 @@ class AdminuserController extends Controller
     {
         $model = new SignupForm();
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
+        if ($model->load(Yii::$app->request->post()))
+        {
+            if ($user = $model->signup())
+            {
                 return $this->redirect(['view', 'id' => $user->id]);
             }
         }
-        return $this->render('create', [
+        return $this->render('create',
+        [
             'model' => $model
         ]);
     }
@@ -84,13 +88,11 @@ class AdminuserController extends Controller
         $model = new ResetpwdForm();
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->resetPassword($id)) {
-                return $this->redirect(['index']);
-            }
+            $model->resetPassword($id);
+            return $this->redirect(['index']);
         }
-        return $this->render('resetpwd', [
-            'model' => $model
-        ]);
+        return $this->render('resetpwd',['model'=>$model]);
+
     }
 
     /**
@@ -155,9 +157,11 @@ class AdminuserController extends Controller
             ->orderBy('description')
             ->all();
 
-        foreach ($allPrivileges as $pri) {
-            $allPrivilegesArray[$pri->name] = $pri->description;
+        foreach ($allPrivileges as $privilege)
+        {
+            $allPrivilegesArray[$privilege->name] = $privilege->description;
         }
+
 
         //2:当前用户权限
         $AuthAssignments = AuthAssignment::find()
@@ -167,7 +171,8 @@ class AdminuserController extends Controller
 
         $AuthAssignmentsArray = array();
 
-        foreach ($AuthAssignments as $AuthAssignment) {
+        foreach ($AuthAssignments as $AuthAssignment)
+        {
             array_push($AuthAssignmentsArray, $AuthAssignment->item_name);
         }
 
@@ -204,9 +209,8 @@ class AdminuserController extends Controller
 
 
         //4:渲染CheckBoxList表单
-        return $this->render('privilege', ['id' => $id, 'AuthAssignmentArray' => $AuthAssignmentsArray,
+        return $this->render('privilege',
+            ['id' => $id, 'AuthAssignmentArray' => $AuthAssignmentsArray,
             'allPrivilegesArray' => $allPrivilegesArray]);
-
-
     }
 }

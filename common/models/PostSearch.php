@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use DeepCopy\f001\A;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -24,7 +25,8 @@ class PostSearch extends Post
 
     public function rules()
     {
-        return [
+        return
+        [
             [['id', 'status', 'create_time', 'update_time', 'author_id'], 'integer'],
             [['title', 'content', 'tags', 'authorName'], 'safe'],
         ];
@@ -56,18 +58,19 @@ class PostSearch extends Post
         ([
             'query' => $query,
             'pagination' =>
-            [
-                'pageSize' => 10,
-            ],
-            'sort' =>
-            [
-                'defaultOrder' =>
                 [
-                    'id' => SORT_DESC,
+                    'pageSize' => 20
                 ],
-                'attributes' => ['id', 'title']
-            ]
+            'sort' =>
+                [
+                    'defaultOrder' =>
+                        [
+                            'id' => SORT_ASC
+                        ],
+                    'attributes' => ['id','title']
+                ]
         ]);
+
 
 //        echo '<pre>';
 //        print_r($dataProvider->getModels());

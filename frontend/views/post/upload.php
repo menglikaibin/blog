@@ -2,14 +2,21 @@
 use yii\widgets\ActiveForm;
 ?>
 
-
-
-
 <?php
-$form = ActiveForm::begin(['options'=>['enctype'=>'mutipart/form-data']]);
+if (Yii::$app->session->hasFlash('info'))
+{
+    echo Yii::$app->session->getFlash('info');
+}
+$form = ActiveForm::begin([
+        'options' => ['enctype' => 'multipart/form-data'],
+        'id' => 'upload',
+        'enableAjaxValidation' => false
+])
 ?>
-<?= $form->field($model,'imageFile')->fileInput() ?>
 
-<button>Submit</button>
+
+<?= $form->field($model, 'image')->fileInput() ?>
+
+    <button>Submit</button>
 
 <?php ActiveForm::end() ?>

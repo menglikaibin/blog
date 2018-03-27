@@ -45,7 +45,8 @@ class AdminuserSearch extends Adminuser
 
         // add conditions that should always apply here
 
-        $dataProvider = new ActiveDataProvider([
+        $dataProvider = new ActiveDataProvider
+        ([
             'query' => $query,
         ]);
 
